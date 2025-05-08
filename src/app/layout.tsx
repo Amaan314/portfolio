@@ -37,7 +37,8 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="relative flex min-h-dvh flex-col bg-background">
+          <div className="subtle-plasma-background"></div>
+          <div className="relative flex min-h-dvh flex-col bg-transparent"> {/* Changed bg-background to bg-transparent */}
             <Navbar />
             <main className="flex-1">{children}</main>
             <Footer />

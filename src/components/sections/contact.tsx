@@ -18,6 +18,9 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { useToast } from "@/hooks/use-toast"
 import { Github, Linkedin, Mail, Send } from "lucide-react"
 import Link from "next/link"
+import { useRef } from "react"
+import { useScrollAnimation } from "@/hooks/useScrollAnimation"
+import { cn } from "@/lib/utils"
 
 const contactFormSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
@@ -29,6 +32,14 @@ type ContactFormValues = z.infer<typeof contactFormSchema>
 
 export function ContactSection() {
   const { toast } = useToast()
+  const sectionRef = useRef<HTMLElement>(null);
+  const isVisible = useScrollAnimation(sectionRef, { threshold: 0.1, triggerOnce: true });
+
+  const formCardRef = useRef<HTMLDivElement>(null);
+  const isFormCardVisible = useScrollAnimation(formCardRef, { threshold: 0.2, triggerOnce: true });
+
+  const infoCardsRef = useRef<HTMLDivElement>(null);
+  const areInfoCardsVisible = useScrollAnimation(infoCardsRef, { threshold: 0.2, triggerOnce: true });
 
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactFormSchema),
@@ -51,13 +62,25 @@ export function ContactSection() {
   }
 
   return (
-    <section id="contact" className="py-16 md:py-24 bg-secondary/30">
+    <section 
+      id="contact" 
+      ref={sectionRef}
+      className={cn("py-16 md:py-24 bg-secondary/50 backdrop-blur-sm", // Added backdrop-blur
+                   "scroll-animate scroll-animate-fade-in", isVisible ? "scroll-animate-active" : "")}
+    >
       <div className="container mx-auto max-w-4xl px-4">
-        <h2 className="mb-12 text-center text-3xl font-bold md:text-4xl">
+        <h2 
+          className={cn("mb-12 text-center text-3xl font-bold md:text-4xl scroll-animate scroll-animate-slide-up", isVisible ? "scroll-animate-active" : "")}
+          style={{transitionDelay: '0.1s'}}
+        >
           Get In Touch
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-            <Card className="shadow-lg">
+            <Card 
+              ref={formCardRef}
+              className={cn("shadow-lg scroll-animate scroll-animate-slide-in-left", isFormCardVisible ? "scroll-animate-active" : "")}
+              style={{transitionDelay: '0.3s'}}
+            >
               <CardHeader>
                 <CardTitle className="text-xl text-primary">Send me a message</CardTitle>
                 <CardDescription>I&apos;d love to hear from you!</CardDescription>
@@ -111,8 +134,12 @@ export function ContactSection() {
                 </Form>
               </CardContent>
             </Card>
-             <div className="space-y-6">
-                <Card className="shadow-lg">
+             <div 
+               ref={infoCardsRef}
+               className={cn("space-y-6 scroll-animate scroll-animate-slide-in-right", areInfoCardsVisible ? "scroll-animate-active" : "")}
+               style={{transitionDelay: '0.3s'}}
+             >
+                <Card className="shadow-lg" style={{transitionDelay: '0.4s'}}>
                     <CardHeader>
                         <CardTitle className="text-xl text-primary">Contact Information</CardTitle>
                     </CardHeader>
@@ -128,7 +155,7 @@ export function ContactSection() {
                         </p>
                     </CardContent>
                 </Card>
-                <Card className="shadow-lg">
+                <Card className="shadow-lg" style={{transitionDelay: '0.5s'}}>
                     <CardHeader>
                         <CardTitle className="text-xl text-primary">Connect With Me</CardTitle>
                     </CardHeader>

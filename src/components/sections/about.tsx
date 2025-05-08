@@ -1,17 +1,40 @@
+"use client"
+
 import Image from "next/image"
 import { Card, CardContent } from "@/components/ui/card"
+import { useRef } from "react"
+import { useScrollAnimation } from "@/hooks/useScrollAnimation"
+import { cn } from "@/lib/utils"
 
 export function AboutSection() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const isVisible = useScrollAnimation(sectionRef, { threshold: 0.2, triggerOnce: true });
+
+  const imageRef = useRef<HTMLDivElement>(null);
+  const isImageVisible = useScrollAnimation(imageRef, { threshold: 0.3, triggerOnce: true });
+  
+  const textRef = useRef<HTMLDivElement>(null);
+  const isTextVisible = useScrollAnimation(textRef, { threshold: 0.3, triggerOnce: true });
+
   return (
-    <section id="about" className="py-16 md:py-24 bg-background">
+    <section 
+      id="about" 
+      ref={sectionRef} 
+      className={cn("py-16 md:py-24 bg-background/80 backdrop-blur-sm", // Added backdrop-blur for subtle effect over plasma
+                   "scroll-animate scroll-animate-fade-in", isVisible ? "scroll-animate-active" : "")}
+    >
       <div className="container mx-auto max-w-5xl px-4">
-        <h2 className="mb-12 text-center text-3xl font-bold md:text-4xl">
+        <h2 className={cn("mb-12 text-center text-3xl font-bold md:text-4xl scroll-animate scroll-animate-slide-up", isVisible ? "scroll-animate-active" : "")} style={{transitionDelay: '0.1s'}}>
           About Me
         </h2>
-        <Card className="overflow-hidden shadow-xl">
-          <CardContent className="p-0 md:p-0"> {/* Remove padding for md:grid to work well */}
+        <Card className={cn("overflow-hidden shadow-xl scroll-animate scroll-animate-zoom-in", isVisible ? "scroll-animate-active" : "")} style={{transitionDelay: '0.3s'}}>
+          <CardContent className="p-0 md:p-0">
             <div className="md:grid md:grid-cols-3 md:gap-0 items-stretch">
-              <div className="md:col-span-1 relative h-64 md:h-auto">
+              <div 
+                ref={imageRef} 
+                className={cn("md:col-span-1 relative h-64 md:h-auto scroll-animate scroll-animate-slide-in-left", isImageVisible ? "scroll-animate-active" : "")}
+                style={{transitionDelay: '0.5s'}}
+              >
                 <Image
                   src="https://picsum.photos/seed/profile/400/600"
                   alt="Your Name - Profile Picture"
@@ -21,7 +44,11 @@ export function AboutSection() {
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 33vw"
                 />
               </div>
-              <div className="md:col-span-2 p-6 md:p-10 flex flex-col justify-center">
+              <div 
+                ref={textRef} 
+                className={cn("md:col-span-2 p-6 md:p-10 flex flex-col justify-center scroll-animate scroll-animate-slide-in-right", isTextVisible ? "scroll-animate-active" : "")}
+                style={{transitionDelay: '0.5s'}}
+              >
                 <h3 className="mb-4 text-2xl font-semibold text-primary">
                   A Bit About My Journey
                 </h3>
