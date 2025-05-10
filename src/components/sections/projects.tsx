@@ -166,23 +166,22 @@ interface ProjectModalProps {
   onClose: () => void;
 }
 
-// ProjectModal remains unchanged as per user request
 function ProjectModal({ project, onClose }: ProjectModalProps) {
   return (
     <Dialog open={!!project} onOpenChange={(isOpen) => !isOpen && onClose()}>
-      <DialogContent className="max-w-4xl w-full p-0 aspect-[27/22] max-h-[90vh] overflow-hidden shadow-2xl">
-        <div className="grid grid-cols-3 h-full">
-          <div className="col-span-1 h-full relative bg-muted">
+      <DialogContent className="max-w-4xl w-full p-0 md:aspect-[27/22] max-h-[90vh] overflow-hidden shadow-2xl">
+        <div className="grid md:grid-cols-3 h-full">
+          <div className="hidden md:block md:col-span-1 h-full relative bg-muted md:rounded-l-lg">
             <Image
               src={project.imageUrl}
               alt={project.title}
               fill
-              className="object-cover rounded-l-lg"
+              className="object-cover md:rounded-l-lg"
               data-ai-hint={project.imageHint}
-              sizes="33vw"
+              sizes="md:33vw"
             />
           </div>
-          <div className="col-span-2 p-6 flex flex-col h-full overflow-hidden bg-card">
+          <div className="col-span-3 md:col-span-2 p-6 flex flex-col h-full overflow-hidden bg-card rounded-lg md:rounded-none md:rounded-r-lg">
             <DialogHeader className="mb-2">
               <DialogTitle className="text-3xl font-bold text-primary">{project.title}</DialogTitle>
             </DialogHeader>
@@ -207,7 +206,7 @@ function ProjectModal({ project, onClose }: ProjectModalProps) {
             </div>
 
             <DialogFooter className="mt-auto pt-6 border-t border-border/50">
-              <div className="flex justify-end gap-3 w-full">
+              <div className="flex flex-wrap justify-end gap-3 w-full"> {/* Added flex-wrap for mobile */}
                 {project.liveUrl && (
                   <Button variant="outline" asChild className="shadow-sm hover:scale-105 transition-transform">
                     <Link href={project.liveUrl} target="_blank" rel="noopener noreferrer">
@@ -236,4 +235,3 @@ function ProjectModal({ project, onClose }: ProjectModalProps) {
     </Dialog>
   );
 }
-
