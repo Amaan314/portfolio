@@ -126,7 +126,7 @@ function ProjectCard({ project, delay, onViewDetails }: ProjectCardProps) {
       <CardContent className="flex-grow p-4 pt-0"> {/* Reduced padding */}
         <h4 className="mb-2 text-xs font-semibold">Tech Stack:</h4> {/* Smaller heading */}
         <div className="flex flex-wrap gap-1"> {/* Reduced gap */}
-          {project.techStack.slice(0, 5).map((tech) => ( // Limit displayed tech stack items
+          {project.techStack.slice(0, 5).map((tech) => (
             <Badge key={tech} variant="secondary" className="text-xs px-1.5 py-0.5"> {/* Smaller badge */}
               {tech}
             </Badge>
@@ -142,15 +142,15 @@ function ProjectCard({ project, delay, onViewDetails }: ProjectCardProps) {
         </Button>
         <div className="flex gap-1"> {/* Reduced gap */}
           {project.liveUrl && (
-            <Button variant="outline" size="icon" asChild className="h-7 w-7" onClick={(e) => e.stopPropagation()}> {/* Stop propagation */}
-              <Link href={project.liveUrl} target="_blank" rel="noopener noreferrer" aria-label="Live Demo">
+            <Button variant="outline" size="icon" asChild className="h-7 w-7">
+              <Link href={project.liveUrl} target="_blank" rel="noopener noreferrer" aria-label="Live Demo" onClick={(e) => e.stopPropagation()}>
                 <ExternalLink className="h-3.5 w-3.5" /> {/* Smaller icon */}
               </Link>
             </Button>
           )}
           {project.githubUrl && (
-            <Button variant="outline" size="icon" asChild className="h-7 w-7" onClick={(e) => e.stopPropagation()}> {/* Stop propagation */}
-              <Link href={project.githubUrl} target="_blank" rel="noopener noreferrer" aria-label="View Code">
+            <Button variant="outline" size="icon" asChild className="h-7 w-7">
+              <Link href={project.githubUrl} target="_blank" rel="noopener noreferrer" aria-label="View Code" onClick={(e) => e.stopPropagation()}>
                 <Github className="h-3.5 w-3.5" /> {/* Smaller icon */}
               </Link>
             </Button>
