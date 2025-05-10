@@ -1,6 +1,6 @@
 
 import type { LucideIcon } from "lucide-react";
-import { Code, Cpu, Database, Users, Brain, Paintbrush, Palette, GitBranch, Server, Smartphone, Cloud, Component } from "lucide-react";
+import { Code, Cpu, Database, Users, Brain, Paintbrush, Palette, GitBranch, Server, Smartphone, Cloud, Component, Zap, Share2 } from "lucide-react"; // Added Zap for ML, Share2 for Scraping
 
 export interface Skill {
   name: string;
@@ -29,14 +29,17 @@ export const skillsData: Skill[] = [
   { name: "Teamwork", icon: Users, category: "Soft Skills" },
 ];
 
+export type ProjectCategory = "Web Development" | "Machine Learning" | "Web Scraping" | "Other";
+
 export interface Project {
   id: string;
   title: string;
   description: string;
-  detailedDescription: string; // Added detailed description
+  detailedDescription: string;
   imageUrl: string;
   imageHint: string;
   techStack: string[];
+  category: ProjectCategory;
   liveUrl?: string;
   githubUrl?: string;
 }
@@ -59,6 +62,7 @@ The backend is built with Node.js and Express, utilizing MongoDB for data storag
     imageUrl: "https://picsum.photos/seed/project1/600/400",
     imageHint: "e-commerce website",
     techStack: ["React", "Node.js", "Express", "MongoDB", "Tailwind CSS", "JWT"],
+    category: "Web Development",
     liveUrl: "#",
     githubUrl: "#",
   },
@@ -79,6 +83,7 @@ Built with Next.js for server-side rendering and static site generation benefits
     imageUrl: "https://picsum.photos/seed/project2/600/400",
     imageHint: "task manager app",
     techStack: ["Next.js", "TypeScript", "Firebase", "Shadcn UI", "Drag-and-Drop"],
+    category: "Web Development",
     liveUrl: "#",
     githubUrl: "#",
   },
@@ -100,6 +105,7 @@ The blog is easily deployable on platforms like Vercel or Netlify. Tailwind CSS 
     imageUrl: "https://picsum.photos/seed/project3/600/400",
     imageHint: "blog website",
     techStack: ["Next.js", "Markdown", "Tailwind CSS", "Vercel", "SEO"],
+    category: "Web Development",
     githubUrl: "#",
   },
   {
@@ -119,6 +125,45 @@ This application is built with React and fetches data from a public weather API 
     imageUrl: "https://picsum.photos/seed/project4/600/400",
     imageHint: "weather app ui",
     techStack: ["React", "API Integration", "Chart.js", "CSS Modules", "Geolocation"],
+    category: "Web Development",
+    liveUrl: "#",
+  },
+  {
+    id: "project-5",
+    title: "Sentiment Analyzer",
+    description: "A machine learning model that analyzes text input and predicts its sentiment (positive, negative, neutral).",
+    detailedDescription: `This Sentiment Analyzer utilizes Natural Language Processing (NLP) techniques to determine the emotional tone of a given text.
+Key aspects:
+- Trained on a large dataset of text reviews.
+- Uses a transformer-based model for high accuracy.
+- Provides sentiment scores and classification.
+- Simple API endpoint for integration.
+
+The model is built using Python with libraries like TensorFlow/Keras or PyTorch, and Scikit-learn. Flask/FastAPI is used to serve the model as an API. This project showcases skills in machine learning model development and deployment.
+    `,
+    imageUrl: "https://picsum.photos/seed/project5/600/400",
+    imageHint: "AI algorithm",
+    techStack: ["Python", "TensorFlow", "NLP", "Flask", "Machine Learning"],
+    category: "Machine Learning",
+    githubUrl: "#",
+  },
+  {
+    id: "project-6",
+    title: "News Aggregator Scraper",
+    description: "A web scraping tool that collects news articles from various sources and aggregates them into a single feed.",
+    detailedDescription: `The News Aggregator Scraper is a Python-based tool designed to automate the collection of news articles.
+Features:
+- Scrapes headlines, summaries, and links from multiple news websites.
+- Handles different website structures and anti-scraping measures.
+- Stores data in a structured format (e.g., JSON or CSV).
+- Can be scheduled to run periodically for fresh data.
+
+Built with Python, using libraries like BeautifulSoup for parsing HTML and Requests for HTTP requests. Potential use of Scrapy framework for more complex scraping tasks. Demonstrates ability to extract and process data from the web.
+    `,
+    imageUrl: "https://picsum.photos/seed/project6/600/400",
+    imageHint: "data extraction code",
+    techStack: ["Python", "BeautifulSoup", "Requests", "Web Scraping", "Data Extraction"],
+    category: "Web Scraping",
     liveUrl: "#",
   },
 ];
