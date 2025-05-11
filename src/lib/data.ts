@@ -46,87 +46,55 @@ export interface Project {
 
 export const projectsData: Project[] = [
   {
-    id: "project-1",
-    title: "E-commerce Platform",
-    description: "A full-featured e-commerce platform with product listings, cart functionality, and user authentication. Built with a modern MERN stack.",
-    detailedDescription: `This E-commerce Platform is a comprehensive solution for online retail. 
-Key features include:
-- User registration and authentication (JWT-based).
-- Product catalog with filtering and search.
-- Shopping cart and checkout process.
-- Admin panel for managing products, orders, and users.
-- Responsive design for seamless experience across devices.
+    id: "music-player",
+    title: "Music Player",
+    description:
+      "Developed a responsive music player web app using **Next.js**, providing users with an intuitive interface to browse and listen to audio tracks seamlessly.",
+    detailedDescription: `Music Player Web App is a sleek, interactive player built with Next.js and Tailwind CSS. It lets users play music from their local device, create and manage playlists, and enjoy intuitive playback controls—all within a modern, responsive UI.
+Users can easily drag and drop files, upload from their device, and control playback (play, pause, skip, rewind) through a clean interface. The app is lightweight yet feature-rich, perfect for personal music listening.
 
-The backend is built with Node.js and Express, utilizing MongoDB for data storage. The frontend is a React SPA, styled with Tailwind CSS for a modern look and feel. State management is handled using Context API and reducers.
-    `,
-    imageUrl: "https://picsum.photos/seed/project1/600/400",
-    imageHint: "e-commerce website",
-    techStack: ["React", "Node.js", "Express", "MongoDB", "Tailwind CSS", "JWT"],
+Key Features:
+- Drag and Drop Upload: Easily import music files for playback.
+- Custom Playlists: Create and manage your own playlists.
+- Track Metadata: View song title, artist, and other details.
+- Responsive Design: Works smoothly across all screen sizes.
+- Playback Controls:
+  - Play, pause, skip, rewind.
+  - Seek through songs via a progress bar.
+- Interactive Song List: Browse and switch between tracks.
+- Tailwind Styling: Clean, modern look with minimal, elegant design.
+`,
+    imageUrl: "https://i.ibb.co/b5WLDZm7/music-player.png",
+    imageHint: "Music Player",
+    techStack: ["Next.js", "Tailwind CSS", "JavaScript (ES6+)", "React"],
     category: "Web Development",
-    liveUrl: "#",
-    githubUrl: "#",
+    liveUrl: "https://music-player-ap.vercel.app/",
+    githubUrl: "https://github.com/AmaanP314/music-player",
   },
   {
-    id: "project-2",
-    title: "Task Management App",
-    description: "A collaborative task management application to help teams organize and track their work effectively. Features include drag-and-drop interface and real-time updates.",
-    detailedDescription: `The Task Management App is designed for team collaboration and productivity.
-Core functionalities:
-- Create, assign, and track tasks.
-- Kanban-style board with drag-and-drop for task status updates.
-- Real-time updates using Firebase Firestore.
-- User authentication and role-based access.
-- Due dates, priorities, and commenting on tasks.
-
-Built with Next.js for server-side rendering and static site generation benefits. TypeScript ensures type safety throughout the application. Shadcn UI components provide a polished and accessible user interface. Firebase handles authentication and real-time database needs.
-    `,
-    imageUrl: "https://picsum.photos/seed/project2/600/400",
-    imageHint: "task manager app",
-    techStack: ["Next.js", "TypeScript", "Firebase", "Shadcn UI", "Drag-and-Drop"],
+    id: "recipe-finder",
+    title: "Recipe Finder",
+    description:
+      "Built a dynamic application using vanilla JavaScript and SCSS that allows users to search over a million recipes, view detailed instructions, and upload their own recipes. Integrated with the Forkify API.",
+    detailedDescription: `Recipe Finder is a responsive web app that helps users discover recipes based on ingredients, dietary preferences, and more. Built with JavaScript, HTML, and Sass, it offers an interactive and user-friendly experience across all devices.
+Key Features:
+- Recipe Search: Find recipes by ingredient, cuisine, or name.
+- Recipe Details: View full recipe info, including:
+  - Title
+  - Publisher
+  - Prep Time
+  - Servings
+  - Ingredients (formatted as: Quantity, Unit, Description)
+- Adjustable Servings: Change servings, and ingredients auto-scale accordingly.
+- Bookmarks: Save favorite recipes for easy access.
+- Pagination: Browse large sets of results page by page.
+`,
+    imageUrl: "https://i.ibb.co/PGgPRJGZ/recipe-finder.png",
+    imageHint: "Recipe Finder",
+    techStack: ["HTML", "CSS/SCSS", "JavaScript", "Node.js"],
     category: "Web Development",
-    liveUrl: "#",
-    githubUrl: "#",
-  },
-  {
-    id: "project-3",
-    title: "Personal Blog",
-    description: "A statically generated personal blog built with Next.js and Markdown for content. Optimized for SEO and performance.",
-    detailedDescription: `This Personal Blog platform leverages the power of Next.js for optimal performance and SEO.
-Features:
-- Content is written in Markdown and processed at build time.
-- Static site generation (SSG) for fast load times.
-- SEO-friendly URLs and metadata.
-- Syntax highlighting for code blocks.
-- Pagination for blog posts.
-- Light and Dark mode support.
-
-The blog is easily deployable on platforms like Vercel or Netlify. Tailwind CSS is used for styling, allowing for rapid UI development and customization. It's a lightweight and efficient solution for content creators.
-    `,
-    imageUrl: "https://picsum.photos/seed/project3/600/400",
-    imageHint: "blog website",
-    techStack: ["Next.js", "Markdown", "Tailwind CSS", "Vercel", "SEO"],
-    category: "Web Development",
-    githubUrl: "#",
-  },
-  {
-    id: "project-4",
-    title: "Weather Dashboard",
-    description: "A sleek weather dashboard that provides real-time weather information for any city. Uses a third-party weather API.",
-    detailedDescription: `The Weather Dashboard offers users up-to-date weather forecasts.
-Highlights include:
-- Search functionality for any city worldwide.
-- Current weather conditions (temperature, humidity, wind speed).
-- Hourly and daily forecasts.
-- Interactive charts for temperature trends (using Chart.js).
-- Geolocation support to fetch local weather.
-
-This application is built with React and fetches data from a public weather API (e.g., OpenWeatherMap). CSS Modules are used for scoped styling, ensuring maintainability. The design focuses on clarity and ease of use.
-    `,
-    imageUrl: "https://picsum.photos/seed/project4/600/400",
-    imageHint: "weather app ui",
-    techStack: ["React", "API Integration", "Chart.js", "CSS Modules", "Geolocation"],
-    category: "Web Development",
-    liveUrl: "#",
+    liveUrl: "https://forkify-ten-sooty.vercel.app/",
+    githubUrl: "https://github.com/AmaanP314/recipe-finder",
   },
   {
     id: "project-5",
@@ -206,7 +174,7 @@ Key features:
     githubUrl: "https://github.com/AmaanP314/ielts-essay-evaluator/",
   },
   {
-    id: "project-6", // Renamed from project-6 to project-7 to avoid ID conflict after inserting new projects
+    id: "project-6", 
     title: "News Aggregator Scraper",
     description: "A web scraping tool that collects news articles from various sources and aggregates them into a single feed.",
     detailedDescription: `The News Aggregator Scraper is a Python-based tool designed to automate the collection of news articles.
@@ -218,7 +186,7 @@ Features:
 
 Built with Python, using libraries like BeautifulSoup for parsing HTML and Requests for HTTP requests. Potential use of Scrapy framework for more complex scraping tasks. Demonstrates ability to extract and process data from the web.
     `,
-    imageUrl: "https://picsum.photos/seed/project6/600/400", // Kept seed project6 for original image
+    imageUrl: "https://picsum.photos/seed/project6/600/400",
     imageHint: "data extraction code",
     techStack: ["Python", "BeautifulSoup", "Requests", "Web Scraping", "Data Extraction"],
     category: "Web Scraping",
