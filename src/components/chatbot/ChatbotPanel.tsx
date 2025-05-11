@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useRef, useEffect } from 'react';
@@ -19,32 +20,28 @@ interface ChatbotPanelProps {
 
 export function ChatbotPanel({ isOpen, messages, onSendMessage, isLoading }: ChatbotPanelProps) {
   const [inputValue, setInputValue] = useState('');
-  const scrollAreaRef = useRef<React.ElementRef<typeof ScrollArea>>(null); // Ref for the ScrollArea component
-  const scrollViewportRef = useRef<HTMLDivElement | null>(null); // Ref for the viewport div
+  const scrollAreaRef = useRef<React.ElementRef<typeof ScrollArea>>(null); 
+  const scrollViewportRef = useRef<HTMLDivElement | null>(null); 
 
   useEffect(() => {
     if (isOpen && scrollAreaRef.current) {
-      // Attempt to get the viewport ref shortly after the panel opens and scrollAreaRef is available
       const timer = setTimeout(() => {
-        if (scrollAreaRef.current) { // Double check ref is still current
+        if (scrollAreaRef.current) { 
           const viewport = scrollAreaRef.current.querySelector<HTMLDivElement>('div[data-radix-scroll-area-viewport]');
           if (viewport) {
             scrollViewportRef.current = viewport;
-            // Initial scroll to bottom when panel opens with existing messages
             viewport.scrollTop = viewport.scrollHeight;
           }
         }
-      }, 50); // A small delay to allow Radix internals to render
+      }, 50); 
       return () => clearTimeout(timer);
     } else if (!isOpen) {
-      // Clear viewport ref when panel is closed
       scrollViewportRef.current = null;
     }
   }, [isOpen]);
 
   useEffect(() => {
     if (scrollViewportRef.current && isOpen) {
-      // Scroll to bottom when new messages arrive or loading state changes, only if panel is open
       scrollViewportRef.current.scrollTop = scrollViewportRef.current.scrollHeight;
     }
   }, [messages, isLoading, isOpen]);
@@ -61,14 +58,12 @@ export function ChatbotPanel({ isOpen, messages, onSendMessage, isLoading }: Cha
   return (
     <div
       className={cn(
-        "fixed z-40 flex flex-col space-y-2",
-        // Mobile positioning: above the toggle
+        "fixed z-40 flex flex-col space-y-2 overflow-hidden", // Added overflow-hidden
         "bottom-[calc(theme(spacing.6)_+_theme(spacing.14)_+_theme(spacing.2))] left-6", 
-        "w-[calc(100%_-_theme(spacing.12))]", // width for mobile (100% - 2 * 1.5rem margins)
-        // Desktop (sm+) positioning: to the right of the toggle
+        "w-[calc(100%_-_theme(spacing.12))]", 
         "sm:bottom-6 sm:left-[calc(theme(spacing.6)_+_theme(spacing.14)_+_theme(spacing.2))]",
-        "sm:w-auto sm:min-w-[320px] sm:max-w-sm md:min-w-[350px]", // Desktop widths
-        "max-h-[calc(100dvh-12rem)]", // Max height with clearance for top/bottom elements
+        "sm:w-auto sm:min-w-[320px] sm:max-w-sm md:min-w-[350px]", 
+        "max-h-[calc(100dvh-12rem)]", 
         "transition-all duration-300 ease-out",
         isOpen
           ? "opacity-100 translate-y-0 sm:translate-x-0 pointer-events-auto"
@@ -77,8 +72,8 @@ export function ChatbotPanel({ isOpen, messages, onSendMessage, isLoading }: Cha
       aria-hidden={!isOpen}
     >
       <ScrollArea
-        ref={scrollAreaRef} // Assign ref to the ScrollArea component
-        className="flex-grow min-h-0 chatbot-message-scroll-area" 
+        ref={scrollAreaRef}
+        className="h-full flex-grow min-h-0 chatbot-message-scroll-area" // Added h-full for explicitness
       >
         <div className="p-4 flex flex-col space-y-4">
           {messages.map((msg) => (
@@ -127,3 +122,4 @@ export function ChatbotPanel({ isOpen, messages, onSendMessage, isLoading }: Cha
     </div>
   );
 }
+
