@@ -192,6 +192,12 @@
     opacity: 1;
     transform: scale(1);
   }
+
+  /* Chatbot message scroll area fade effect */
+  .chatbot-message-scroll-area > div[data-radix-scroll-area-viewport] {
+    mask-image: linear-gradient(to top, black calc(100% - 60px), transparent 100%);
+    -webkit-mask-image: linear-gradient(to top, black calc(100% - 60px), transparent 100%);
+  }
 }
 
 
