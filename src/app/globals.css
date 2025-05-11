@@ -194,6 +194,7 @@
   }
 
   /* Chatbot message scroll area fade effect */
+  /* Targets the viewport div within the Radix ScrollArea component */
   .chatbot-message-scroll-area > div[data-radix-scroll-area-viewport] {
     mask-image: linear-gradient(to top, black calc(100% - 60px), transparent 100%);
     -webkit-mask-image: linear-gradient(to top, black calc(100% - 60px), transparent 100%);
@@ -247,3 +248,4 @@
   animation: subtle-plasma 45s ease infinite;
   opacity: 0.6; /* Slightly less visible in dark mode for subtlety */
 }
+

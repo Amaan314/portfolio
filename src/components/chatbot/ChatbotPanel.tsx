@@ -18,27 +18,26 @@ interface ChatbotPanelProps {
 
 export function ChatbotPanel({ isOpen, messages, onSendMessage, isLoading }: ChatbotPanelProps) {
   const [inputValue, setInputValue] = useState('');
-  const scrollViewportRef = useRef<HTMLDivElement>(null); // Ref for the viewport div
+  const scrollViewportRef = useRef<HTMLDivElement>(null); 
 
   useEffect(() => {
-    // Scroll to bottom when messages change
     if (scrollViewportRef.current) {
+      // Scroll to bottom when messages change or loading state changes
+      // This ensures the latest message or typing indicator is visible
       scrollViewportRef.current.scrollTop = scrollViewportRef.current.scrollHeight;
     }
-  }, [messages, isLoading]);
+  }, [messages, isLoading, isOpen]); // Added isOpen to ensure scroll on open
 
-  // Effect to assign ref to the viewport element once ScrollArea is mounted
   useEffect(() => {
     if (isOpen) {
-      // Attempt to find the viewport after a short delay, as ScrollArea might not be fully rendered
       const timer = setTimeout(() => {
         const viewport = document.querySelector('.chatbot-message-scroll-area div[data-radix-scroll-area-viewport]');
         if (viewport) {
           scrollViewportRef.current = viewport as HTMLDivElement;
-          // Initial scroll to bottom when panel opens
+          // Initial scroll to bottom when panel opens and viewport is found
           scrollViewportRef.current.scrollTop = scrollViewportRef.current.scrollHeight;
         }
-      }, 100); // Adjust delay if needed
+      }, 100); 
       return () => clearTimeout(timer);
     }
   }, [isOpen]);
@@ -65,28 +64,40 @@ export function ChatbotPanel({ isOpen, messages, onSendMessage, isLoading }: Cha
           : "opacity-0 translate-y-6 pointer-events-none" 
       )}
     >
-      {/* Messages Area: No background, messages flow bottom-up, fades at top */}
       <ScrollArea
-        className="flex-grow max-h-[50vh] chatbot-message-scroll-area" // Removed background, added specific class
+        className="flex-grow max-h-[50vh] chatbot-message-scroll-area" 
       >
-        {/* Inner container for messages with bottom-up flow */}
         <div className="p-4 flex flex-col-reverse space-y-4">
-          {/* isLoading indicator is last in DOM, so it appears at the visual bottom (top of flex-reversed-column) */}
+          {/* 
+            With flex-col-reverse, the DOM order of elements is reversed for display.
+            To have the typing indicator appear at the *visual bottom*, it must be the *last* item
+            in this block in terms of DOM order if not reversed, or the *first* if reversed.
+            So, messages are mapped first (oldest to newest in DOM), then the typing indicator.
+            flex-col-reverse will display:
+            - Typing indicator (visual bottom)
+            - Newest message
+            - ...
+            - Oldest message (visual top)
+          */}
+          
+          {/* Typing indicator: Rendered after all messages in DOM order. */}
+          {/* Due to flex-col-reverse, this will appear at the visual bottom if isLoading is true. */}
           {isLoading && (
-            <div className="flex justify-start w-full">
-              <div className="bg-muted p-2 rounded-lg inline-block shadow">
+            <div className="flex justify-start w-full"> {/* Bot messages are typically aligned left */}
+              <div className="bg-card text-card-foreground border border-border p-2 rounded-lg inline-block shadow">
                 <span className="italic text-muted-foreground">Typing...</span>
               </div>
             </div>
           )}
-          {/* Messages are mapped in natural order; flex-col-reverse handles visual order */}
+
+          {/* Messages: Mapped in natural order (oldest to newest). */}
+          {/* Due to flex-col-reverse, newest messages will appear visually lower (closer to bottom). */}
           {messages.map((msg) => (
             <ChatMessage key={msg.id} message={msg.text} sender={msg.sender} />
           ))}
         </div>
       </ScrollArea>
 
-      {/* Input Form: Retains its background for clarity */}
       <form
         onSubmit={handleSubmit}
         className="p-3 bg-card/80 backdrop-blur-md shadow-xl rounded-lg border border-border"
@@ -115,3 +126,4 @@ export function ChatbotPanel({ isOpen, messages, onSendMessage, isLoading }: Cha
     </div>
   );
 }
+
