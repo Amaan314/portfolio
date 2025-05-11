@@ -6,6 +6,7 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { Navbar } from '@/components/navbar';
 import { Footer } from '@/components/footer';
 import { Toaster } from "@/components/ui/toaster";
+import { Chatbot } from '@/components/chatbot/Chatbot';
 
 
 const fontSans = FontSans({
@@ -44,6 +45,7 @@ export default function RootLayout({
             <Footer />
           </div>
           <Toaster />
+          <Chatbot />
         </ThemeProvider>
       </body>
     </html>
