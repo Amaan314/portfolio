@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useRef, useEffect } from 'react';
@@ -6,6 +5,7 @@ import { SendHorizonal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import type { ScrollAreaPrimitive } from '@radix-ui/react-scroll-area'; // Import type for ref
 import { ChatMessage } from './ChatMessage';
 import type { Message } from './Chatbot';
 import { cn } from '@/lib/utils';
@@ -19,24 +19,25 @@ interface ChatbotPanelProps {
 
 export function ChatbotPanel({ isOpen, messages, onSendMessage, isLoading }: ChatbotPanelProps) {
   const [inputValue, setInputValue] = useState('');
-  const scrollViewportRef = useRef<HTMLDivElement | null>(null); 
+  const scrollAreaRef = useRef<React.ElementRef<typeof ScrollArea>>(null); // Ref for the ScrollArea component
+  const scrollViewportRef = useRef<HTMLDivElement | null>(null); // Ref for the viewport div
 
   useEffect(() => {
-    if (isOpen) {
-      // Attempt to get the viewport ref shortly after the panel opens
+    if (isOpen && scrollAreaRef.current) {
+      // Attempt to get the viewport ref shortly after the panel opens and scrollAreaRef is available
       const timer = setTimeout(() => {
-        const viewport = document.querySelector('.chatbot-message-scroll-area > div[data-radix-scroll-area-viewport]');
-        if (viewport) {
-          scrollViewportRef.current = viewport as HTMLDivElement;
-          // Initial scroll to bottom when panel opens with existing messages
-          if (scrollViewportRef.current) {
-            scrollViewportRef.current.scrollTop = scrollViewportRef.current.scrollHeight;
+        if (scrollAreaRef.current) { // Double check ref is still current
+          const viewport = scrollAreaRef.current.querySelector<HTMLDivElement>('div[data-radix-scroll-area-viewport]');
+          if (viewport) {
+            scrollViewportRef.current = viewport;
+            // Initial scroll to bottom when panel opens with existing messages
+            viewport.scrollTop = viewport.scrollHeight;
           }
         }
-      }, 50); // A small delay to allow DOM to update
+      }, 50); // A small delay to allow Radix internals to render
       return () => clearTimeout(timer);
-    } else {
-      // Clear ref when panel is closed to avoid stale references
+    } else if (!isOpen) {
+      // Clear viewport ref when panel is closed
       scrollViewportRef.current = null;
     }
   }, [isOpen]);
@@ -76,9 +77,9 @@ export function ChatbotPanel({ isOpen, messages, onSendMessage, isLoading }: Cha
       aria-hidden={!isOpen}
     >
       <ScrollArea
-        className="flex-grow min-h-0 chatbot-message-scroll-area" // No explicit background here for message area
+        ref={scrollAreaRef} // Assign ref to the ScrollArea component
+        className="flex-grow min-h-0 chatbot-message-scroll-area" 
       >
-        {/* Messages flow top-to-bottom (removed flex-col-reverse) */}
         <div className="p-4 flex flex-col space-y-4">
           {messages.map((msg) => (
             <ChatMessage key={msg.id} message={msg.text} sender={msg.sender} />
@@ -107,8 +108,8 @@ export function ChatbotPanel({ isOpen, messages, onSendMessage, isLoading }: Cha
             className="flex-1 bg-background/70 focus:ring-primary rounded-md shadow-inner"
             disabled={isLoading}
             aria-label="Chat input"
-            aria-hidden={!isOpen} // Hide from AT when panel is closed
-            tabIndex={isOpen ? 0 : -1} // Control focusability
+            aria-hidden={!isOpen} 
+            tabIndex={isOpen ? 0 : -1} 
           />
           <Button
             type="submit"
@@ -126,4 +127,3 @@ export function ChatbotPanel({ isOpen, messages, onSendMessage, isLoading }: Cha
     </div>
   );
 }
-
