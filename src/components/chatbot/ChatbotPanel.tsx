@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useRef, useEffect } from 'react';
@@ -31,13 +32,16 @@ export function ChatbotPanel({ isOpen, messages, onSendMessage, isLoading }: Cha
   useEffect(() => {
     if (isOpen) {
       const timer = setTimeout(() => {
-        const viewport = document.querySelector('.chatbot-message-scroll-area div[data-radix-scroll-area-viewport]');
+        // Query for the specific viewport div of the ScrollArea
+        const viewport = document.querySelector('.chatbot-message-scroll-area > div[data-radix-scroll-area-viewport]');
         if (viewport) {
           scrollViewportRef.current = viewport as HTMLDivElement;
           // Initial scroll to bottom when panel opens and viewport is found
-          scrollViewportRef.current.scrollTop = scrollViewportRef.current.scrollHeight;
+          if (scrollViewportRef.current) {
+            scrollViewportRef.current.scrollTop = scrollViewportRef.current.scrollHeight;
+          }
         }
-      }, 100); 
+      }, 100); // Small delay to ensure DOM is updated
       return () => clearTimeout(timer);
     }
   }, [isOpen]);
@@ -54,19 +58,21 @@ export function ChatbotPanel({ isOpen, messages, onSendMessage, isLoading }: Cha
   return (
     <div
       className={cn(
-        "fixed left-6 bottom-[calc(1.5rem+3.5rem+0.5rem)]", 
-        "w-[calc(100%-3rem)] sm:w-auto sm:min-w-[320px] sm:max-w-sm md:min-w-[350px]", 
-        "max-h-[calc(100vh-10rem)]", 
-        "flex flex-col z-40 space-y-2", 
+        "fixed left-6 bottom-[calc(1.5rem+3.5rem+0.5rem)]", // Positioned above the toggle button
+        "w-[calc(100%-3rem)] sm:w-auto sm:min-w-[320px] sm:max-w-sm md:min-w-[350px]", // Responsive width
+        "max-h-[calc(100vh-10rem)]", // Max height to not overlap navbar too much
+        "flex flex-col z-40 space-y-2", // Flex column layout
         "transition-all duration-300 ease-out",
         isOpen
           ? "opacity-100 translate-y-0 pointer-events-auto"
-          : "opacity-0 translate-y-6 pointer-events-none" 
+          : "opacity-0 translate-y-6 pointer-events-none" // Animation for open/close
       )}
     >
+      {/* Message display area */}
       <ScrollArea
-        className="flex-grow max-h-[50vh] chatbot-message-scroll-area" 
+        className="flex-grow chatbot-message-scroll-area" // flex-grow allows it to take available space, removed max-h-[50vh]
       >
+        {/* Inner div for padding and flex-col-reverse */}
         <div className="p-4 flex flex-col-reverse space-y-4">
           {/* 
             With flex-col-reverse, the DOM order of elements is reversed for display.
@@ -98,6 +104,7 @@ export function ChatbotPanel({ isOpen, messages, onSendMessage, isLoading }: Cha
         </div>
       </ScrollArea>
 
+      {/* Input area */}
       <form
         onSubmit={handleSubmit}
         className="p-3 bg-card/80 backdrop-blur-md shadow-xl rounded-lg border border-border"
