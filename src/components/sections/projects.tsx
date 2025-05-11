@@ -1,10 +1,9 @@
-
 "use client"
 
 import Image from "next/image"
 import Link from "next/link"
 import { projectsData, type Project, type ProjectCategory } from "@/lib/data"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription as ShadcnCardDescription } from "@/components/ui/card" // Renamed CardDescription to avoid conflict
+import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription as ShadcnCardDescription } from "@/components/ui/card" 
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Github, ExternalLink } from "lucide-react" 
@@ -180,54 +179,63 @@ function ProjectModal({ project, onClose }: ProjectModalProps) {
               sizes="md:33vw"
             />
           </div>
-          <div className="col-span-3 md:col-span-2 p-6 flex flex-col h-full overflow-hidden bg-card rounded-lg md:rounded-none md:rounded-r-lg max-h-[90vh] md:max-h-none">
-            <DialogHeader className="mb-2">
-              <DialogTitle className="text-3xl font-bold text-primary">{project.title}</DialogTitle>
-            </DialogHeader>
-            
-            <ScrollArea className="flex-grow my-2 pr-3">
-              <DialogDescription asChild>
-                 <p className="text-sm text-muted-foreground whitespace-pre-line">
-                   {project.detailedDescription}
-                 </p>
-              </DialogDescription>
-            </ScrollArea>
-            
-            <div className="mt-4 shrink-0">
-              <h4 className="mb-2 text-sm font-semibold text-foreground">Tech Stack:</h4>
-              <div className="flex flex-wrap gap-2">
-                {project.techStack.map((tech) => (
-                  <Badge key={tech} variant="secondary" className="text-xs">
-                    {tech}
-                  </Badge>
-                ))}
-              </div>
-            </div>
+          {/* Content Panel: takes full height of its grid cell, flex column layout, scrollable via ScrollArea */}
+          <div className="col-span-3 md:col-span-2 flex flex-col h-full bg-card rounded-lg md:rounded-none md:rounded-r-lg max-h-[90vh] md:max-h-none">
+            <ScrollArea className="h-full w-full">
+              {/* Inner div for padding and to ensure flex column works for footer positioning */}
+              <div className="p-6 flex flex-col min-h-full"> 
+                <DialogHeader className="mb-4 shrink-0">
+                  <DialogTitle className="text-3xl font-bold text-primary">{project.title}</DialogTitle>
+                </DialogHeader>
+                
+                {/* Description wrapper: flex-grow pushes tech stack & footer down if content is short */}
+                <div className="flex-grow my-4">
+                  <DialogDescription asChild>
+                     <p className="text-sm text-muted-foreground whitespace-pre-line">
+                       {project.detailedDescription}
+                     </p>
+                  </DialogDescription>
+                </div>
+                
+                {/* Tech Stack: part of scrollable content */}
+                <div className="mt-4 shrink-0">
+                  <h4 className="mb-2 text-sm font-semibold text-foreground">Tech Stack:</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {project.techStack.map((tech) => (
+                      <Badge key={tech} variant="secondary" className="text-xs">
+                        {tech}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
 
-            <DialogFooter className="mt-auto pt-6 border-t border-border/50 shrink-0">
-              <div className="flex flex-wrap justify-end gap-3 w-full"> 
-                {project.liveUrl && (
-                  <Button variant="outline" asChild className="shadow-sm hover:scale-105 transition-transform">
-                    <Link href={project.liveUrl} target="_blank" rel="noopener noreferrer">
-                      <ExternalLink className="mr-2 h-4 w-4" /> Live Demo
-                    </Link>
-                  </Button>
-                )}
-                {project.githubUrl && (
-                  <Button variant="outline" asChild className="shadow-sm hover:scale-105 transition-transform">
-                    <Link href={project.githubUrl} target="_blank" rel="noopener noreferrer">
-                      <Github className="mr-2 h-4 w-4" /> View Code
-                    </Link>
-                  </Button>
-                )}
-                {!project.liveUrl && !project.githubUrl && (
-                   <p className="text-sm text-muted-foreground italic">No external links available for this project.</p>
-                )}
-                 <DialogClose asChild>
-                    <Button variant="ghost" className="hover:scale-105 transition-transform">Close</Button>
-                  </DialogClose>
+                {/* Footer: at the end of scrollable content */}
+                <DialogFooter className="mt-6 pt-6 border-t border-border/50 shrink-0">
+                  <div className="flex flex-wrap justify-end gap-3 w-full"> 
+                    {project.liveUrl && (
+                      <Button variant="outline" asChild className="shadow-sm hover:scale-105 transition-transform">
+                        <Link href={project.liveUrl} target="_blank" rel="noopener noreferrer">
+                          <ExternalLink className="mr-2 h-4 w-4" /> Live Demo
+                        </Link>
+                      </Button>
+                    )}
+                    {project.githubUrl && (
+                      <Button variant="outline" asChild className="shadow-sm hover:scale-105 transition-transform">
+                        <Link href={project.githubUrl} target="_blank" rel="noopener noreferrer">
+                          <Github className="mr-2 h-4 w-4" /> View Code
+                        </Link>
+                      </Button>
+                    )}
+                    {!project.liveUrl && !project.githubUrl && (
+                       <p className="text-sm text-muted-foreground italic">No external links available for this project.</p>
+                    )}
+                     <DialogClose asChild>
+                        <Button variant="ghost" className="hover:scale-105 transition-transform">Close</Button>
+                      </DialogClose>
+                  </div>
+                </DialogFooter>
               </div>
-            </DialogFooter>
+            </ScrollArea>
           </div>
         </div>
       </DialogContent>
