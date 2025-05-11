@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useRef, useEffect } from 'react';
@@ -24,24 +23,21 @@ export function ChatbotPanel({ isOpen, messages, onSendMessage, isLoading }: Cha
   useEffect(() => {
     if (scrollViewportRef.current) {
       // Scroll to bottom when messages change or loading state changes
-      // This ensures the latest message or typing indicator is visible
       scrollViewportRef.current.scrollTop = scrollViewportRef.current.scrollHeight;
     }
-  }, [messages, isLoading, isOpen]); // Added isOpen to ensure scroll on open
+  }, [messages, isLoading, isOpen]); 
 
   useEffect(() => {
     if (isOpen) {
       const timer = setTimeout(() => {
-        // Query for the specific viewport div of the ScrollArea
         const viewport = document.querySelector('.chatbot-message-scroll-area > div[data-radix-scroll-area-viewport]');
         if (viewport) {
           scrollViewportRef.current = viewport as HTMLDivElement;
-          // Initial scroll to bottom when panel opens and viewport is found
           if (scrollViewportRef.current) {
             scrollViewportRef.current.scrollTop = scrollViewportRef.current.scrollHeight;
           }
         }
-      }, 100); // Small delay to ensure DOM is updated
+      }, 100); 
       return () => clearTimeout(timer);
     }
   }, [isOpen]);
@@ -58,53 +54,34 @@ export function ChatbotPanel({ isOpen, messages, onSendMessage, isLoading }: Cha
   return (
     <div
       className={cn(
-        "fixed left-6 bottom-[calc(1.5rem+3.5rem+0.5rem)]", // Positioned above the toggle button
-        "w-[calc(100%-3rem)] sm:w-auto sm:min-w-[320px] sm:max-w-sm md:min-w-[350px]", // Responsive width
-        "max-h-[calc(100vh-10rem)]", // Max height to not overlap navbar too much
-        "flex flex-col z-40 space-y-2", // Flex column layout
+        "fixed left-6 bottom-[calc(1.5rem+3.5rem+0.5rem)]", 
+        "w-[calc(100%-3rem)] sm:w-auto sm:min-w-[320px] sm:max-w-sm md:min-w-[350px]", 
+        "max-h-[calc(100vh-10rem)]", 
+        "flex flex-col z-40 space-y-2", 
         "transition-all duration-300 ease-out",
         isOpen
           ? "opacity-100 translate-y-0 pointer-events-auto"
-          : "opacity-0 translate-y-6 pointer-events-none" // Animation for open/close
+          : "opacity-0 translate-y-6 pointer-events-none" 
       )}
     >
-      {/* Message display area */}
       <ScrollArea
-        className="flex-grow chatbot-message-scroll-area" // flex-grow allows it to take available space, removed max-h-[50vh]
+        className="flex-grow min-h-0 chatbot-message-scroll-area" // Added min-h-0
       >
-        {/* Inner div for padding and flex-col-reverse */}
         <div className="p-4 flex flex-col-reverse space-y-4">
-          {/* 
-            With flex-col-reverse, the DOM order of elements is reversed for display.
-            To have the typing indicator appear at the *visual bottom*, it must be the *last* item
-            in this block in terms of DOM order if not reversed, or the *first* if reversed.
-            So, messages are mapped first (oldest to newest in DOM), then the typing indicator.
-            flex-col-reverse will display:
-            - Typing indicator (visual bottom)
-            - Newest message
-            - ...
-            - Oldest message (visual top)
-          */}
-          
-          {/* Typing indicator: Rendered after all messages in DOM order. */}
-          {/* Due to flex-col-reverse, this will appear at the visual bottom if isLoading is true. */}
           {isLoading && (
-            <div className="flex justify-start w-full"> {/* Bot messages are typically aligned left */}
+            <div className="flex justify-start w-full"> 
               <div className="bg-card text-card-foreground border border-border p-2 rounded-lg inline-block shadow">
                 <span className="italic text-muted-foreground">Typing...</span>
               </div>
             </div>
           )}
 
-          {/* Messages: Mapped in natural order (oldest to newest). */}
-          {/* Due to flex-col-reverse, newest messages will appear visually lower (closer to bottom). */}
           {messages.map((msg) => (
             <ChatMessage key={msg.id} message={msg.text} sender={msg.sender} />
           ))}
         </div>
       </ScrollArea>
 
-      {/* Input area */}
       <form
         onSubmit={handleSubmit}
         className="p-3 bg-card/80 backdrop-blur-md shadow-xl rounded-lg border border-border"
@@ -133,4 +110,3 @@ export function ChatbotPanel({ isOpen, messages, onSendMessage, isLoading }: Cha
     </div>
   );
 }
-
