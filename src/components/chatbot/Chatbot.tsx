@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
@@ -86,7 +85,6 @@ export function Chatbot() {
       <ChatbotToggle isOpen={isOpen} onToggle={toggleChatbot} />
       <ChatbotPanel
         isOpen={isOpen}
-        onClose={toggleChatbot}
         messages={messages}
         onSendMessage={handleSendMessage}
         isLoading={isLoading}

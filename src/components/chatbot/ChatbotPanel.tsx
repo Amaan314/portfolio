@@ -1,8 +1,7 @@
-
 "use client";
 
 import React, { useState, useRef, useEffect } from 'react';
-import { X, SendHorizonal } from 'lucide-react';
+import { SendHorizonal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -12,13 +11,12 @@ import { cn } from '@/lib/utils';
 
 interface ChatbotPanelProps {
   isOpen: boolean;
-  onClose: () => void;
   messages: Message[];
   onSendMessage: (message: string) => void;
   isLoading: boolean;
 }
 
-export function ChatbotPanel({ isOpen, onClose, messages, onSendMessage, isLoading }: ChatbotPanelProps) {
+export function ChatbotPanel({ isOpen, messages, onSendMessage, isLoading }: ChatbotPanelProps) {
   const [inputValue, setInputValue] = useState('');
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
@@ -39,30 +37,25 @@ export function ChatbotPanel({ isOpen, onClose, messages, onSendMessage, isLoadi
     }
   };
 
-  if (!isOpen) {
-    return null;
-  }
-
   return (
     <div
       className={cn(
-        "fixed bottom-24 left-6 md:bottom-6 md:left-[calc(1.5rem+3.5rem+1rem)]", // Position next to toggle button
-        "w-[calc(100%-3rem)] md:w-1/3 max-w-md h-[70vh] md:h-[calc(100vh-5rem)] max-h-[600px]",
-        "bg-card/80 backdrop-blur-md shadow-2xl rounded-lg border border-border",
-        "flex flex-col z-40",
-        "transition-all duration-300 ease-in-out",
-        isOpen ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-full pointer-events-none"
+        "fixed left-6 bottom-[calc(1.5rem+3.5rem+0.5rem)]", // Positioned above the toggle button
+        "w-[calc(100%-3rem)] sm:w-auto sm:min-w-[320px] sm:max-w-sm md:min-w-[350px]", // Responsive width
+        "max-h-[calc(100vh-10rem)]", // Max height
+        "flex flex-col z-40 space-y-2", // Vertical stack for message area and input
+        "transition-all duration-300 ease-out",
+        isOpen
+          ? "opacity-100 translate-y-0 pointer-events-auto"
+          : "opacity-0 translate-y-6 pointer-events-none" // Slide up and fade
       )}
     >
-      <header className="flex items-center justify-between p-4 border-b border-border">
-        <h3 className="text-lg font-semibold text-primary">Chat Assistant</h3>
-        <Button variant="ghost" size="icon" onClick={onClose} aria-label="Close chat">
-          <X className="h-5 w-5" />
-        </Button>
-      </header>
-
-      <ScrollArea className="flex-1 p-4" ref={scrollAreaRef}>
-        <div className="space-y-4">
+      {/* Messages Area */}
+      <ScrollArea
+        className="flex-grow max-h-[50vh] bg-card/80 backdrop-blur-md shadow-xl rounded-lg border border-border"
+        ref={scrollAreaRef}
+      >
+        <div className="p-4 space-y-4">
           {messages.map((msg) => (
             <ChatMessage key={msg.id} message={msg.text} sender={msg.sender} />
           ))}
@@ -76,17 +69,28 @@ export function ChatbotPanel({ isOpen, onClose, messages, onSendMessage, isLoadi
         </div>
       </ScrollArea>
 
-      <form onSubmit={handleSubmit} className="p-4 border-t border-border">
+      {/* Input Form */}
+      <form
+        onSubmit={handleSubmit}
+        className="p-3 bg-card/80 backdrop-blur-md shadow-xl rounded-lg border border-border"
+      >
         <div className="flex items-center space-x-2">
           <Input
             type="text"
             placeholder="Ask something..."
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
-            className="flex-1 bg-background/70 focus:ring-primary"
+            className="flex-1 bg-background/70 focus:ring-primary rounded-md shadow-inner"
             disabled={isLoading}
+            aria-label="Chat input"
           />
-          <Button type="submit" size="icon" disabled={isLoading || !inputValue.trim()} aria-label="Send message">
+          <Button
+            type="submit"
+            size="icon"
+            disabled={isLoading || !inputValue.trim()}
+            aria-label="Send message"
+            className="rounded-md shadow-md"
+          >
             <SendHorizonal className="h-5 w-5" />
           </Button>
         </div>
