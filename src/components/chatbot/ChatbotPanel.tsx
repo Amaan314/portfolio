@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useRef, useEffect } from 'react';
@@ -18,29 +19,34 @@ interface ChatbotPanelProps {
 
 export function ChatbotPanel({ isOpen, messages, onSendMessage, isLoading }: ChatbotPanelProps) {
   const [inputValue, setInputValue] = useState('');
-  const scrollViewportRef = useRef<HTMLDivElement>(null); 
-
-  useEffect(() => {
-    if (scrollViewportRef.current) {
-      // Scroll to bottom when messages change or loading state changes
-      scrollViewportRef.current.scrollTop = scrollViewportRef.current.scrollHeight;
-    }
-  }, [messages, isLoading, isOpen]); 
+  const scrollViewportRef = useRef<HTMLDivElement | null>(null); 
 
   useEffect(() => {
     if (isOpen) {
+      // Attempt to get the viewport ref shortly after the panel opens
       const timer = setTimeout(() => {
         const viewport = document.querySelector('.chatbot-message-scroll-area > div[data-radix-scroll-area-viewport]');
         if (viewport) {
           scrollViewportRef.current = viewport as HTMLDivElement;
+          // Initial scroll to bottom when panel opens with existing messages
           if (scrollViewportRef.current) {
             scrollViewportRef.current.scrollTop = scrollViewportRef.current.scrollHeight;
           }
         }
-      }, 100); 
+      }, 50); // A small delay to allow DOM to update
       return () => clearTimeout(timer);
+    } else {
+      // Clear ref when panel is closed to avoid stale references
+      scrollViewportRef.current = null;
     }
   }, [isOpen]);
+
+  useEffect(() => {
+    if (scrollViewportRef.current && isOpen) {
+      // Scroll to bottom when new messages arrive or loading state changes, only if panel is open
+      scrollViewportRef.current.scrollTop = scrollViewportRef.current.scrollHeight;
+    }
+  }, [messages, isLoading, isOpen]);
 
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -54,20 +60,29 @@ export function ChatbotPanel({ isOpen, messages, onSendMessage, isLoading }: Cha
   return (
     <div
       className={cn(
-        "fixed left-6 bottom-[calc(1.5rem+3.5rem+0.5rem)]", 
-        "w-[calc(100%-3rem)] sm:w-auto sm:min-w-[320px] sm:max-w-sm md:min-w-[350px]", 
-        "max-h-[calc(100vh-10rem)]", 
-        "flex flex-col z-40 space-y-2", 
+        "fixed z-40 flex flex-col space-y-2",
+        // Mobile positioning: above the toggle
+        "bottom-[calc(theme(spacing.6)_+_theme(spacing.14)_+_theme(spacing.2))] left-6", 
+        "w-[calc(100%_-_theme(spacing.12))]", // width for mobile (100% - 2 * 1.5rem margins)
+        // Desktop (sm+) positioning: to the right of the toggle
+        "sm:bottom-6 sm:left-[calc(theme(spacing.6)_+_theme(spacing.14)_+_theme(spacing.2))]",
+        "sm:w-auto sm:min-w-[320px] sm:max-w-sm md:min-w-[350px]", // Desktop widths
+        "max-h-[calc(100dvh-12rem)]", // Max height with clearance for top/bottom elements
         "transition-all duration-300 ease-out",
         isOpen
-          ? "opacity-100 translate-y-0 pointer-events-auto"
-          : "opacity-0 translate-y-6 pointer-events-none" 
+          ? "opacity-100 translate-y-0 sm:translate-x-0 pointer-events-auto"
+          : "opacity-0 translate-y-4 sm:translate-y-0 sm:-translate-x-4 pointer-events-none" 
       )}
+      aria-hidden={!isOpen}
     >
       <ScrollArea
-        className="flex-grow min-h-0 chatbot-message-scroll-area" // Added min-h-0
+        className="flex-grow min-h-0 chatbot-message-scroll-area" // No explicit background here for message area
       >
-        <div className="p-4 flex flex-col-reverse space-y-4">
+        {/* Messages flow top-to-bottom (removed flex-col-reverse) */}
+        <div className="p-4 flex flex-col space-y-4">
+          {messages.map((msg) => (
+            <ChatMessage key={msg.id} message={msg.text} sender={msg.sender} />
+          ))}
           {isLoading && (
             <div className="flex justify-start w-full"> 
               <div className="bg-card text-card-foreground border border-border p-2 rounded-lg inline-block shadow">
@@ -75,16 +90,13 @@ export function ChatbotPanel({ isOpen, messages, onSendMessage, isLoading }: Cha
               </div>
             </div>
           )}
-
-          {messages.map((msg) => (
-            <ChatMessage key={msg.id} message={msg.text} sender={msg.sender} />
-          ))}
         </div>
       </ScrollArea>
 
       <form
         onSubmit={handleSubmit}
         className="p-3 bg-card/80 backdrop-blur-md shadow-xl rounded-lg border border-border"
+        aria-label="Chat input form"
       >
         <div className="flex items-center space-x-2">
           <Input
@@ -95,6 +107,8 @@ export function ChatbotPanel({ isOpen, messages, onSendMessage, isLoading }: Cha
             className="flex-1 bg-background/70 focus:ring-primary rounded-md shadow-inner"
             disabled={isLoading}
             aria-label="Chat input"
+            aria-hidden={!isOpen} // Hide from AT when panel is closed
+            tabIndex={isOpen ? 0 : -1} // Control focusability
           />
           <Button
             type="submit"
@@ -102,6 +116,8 @@ export function ChatbotPanel({ isOpen, messages, onSendMessage, isLoading }: Cha
             disabled={isLoading || !inputValue.trim()}
             aria-label="Send message"
             className="rounded-md shadow-md"
+            aria-hidden={!isOpen}
+            tabIndex={isOpen ? 0 : -1}
           >
             <SendHorizonal className="h-5 w-5" />
           </Button>
@@ -110,3 +126,4 @@ export function ChatbotPanel({ isOpen, messages, onSendMessage, isLoading }: Cha
     </div>
   );
 }
+
