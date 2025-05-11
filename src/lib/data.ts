@@ -29,7 +29,7 @@ export const skillsData: Skill[] = [
   { name: "Teamwork", icon: Users, category: "Soft Skills" },
 ];
 
-export type ProjectCategory = "Web Development" | "Machine Learning" | "Web Scraping" | "Other";
+export type ProjectCategory = "Web Development" | "Machine Learning" | "Artificial Intelligence" | "Web Scraping" | "Other";
 
 export interface Project {
   id: string;
@@ -148,7 +148,65 @@ The model is built using Python with libraries like TensorFlow/Keras or PyTorch,
     githubUrl: "#",
   },
   {
-    id: "project-6",
+    id: "youtube-recommender",
+    title: "YouTube Video Recommender",
+    description:
+      "This project allows users to analyze and recommend YouTube videos based on specific search queries.",
+    detailedDescription: `This project allows users to analyze and recommend YouTube videos based on specific search queries. It fetches video data using the YouTube Data API v3, processes and visualizes the data, and performs sentiment analysis on video comments using a finetuned roberta LLM which was finetuned on over 1 million youtube comments to provide better recommendations.
+Key features:
+- Fetches video data using the YouTube Data API v3.
+- Analyzes video metadata and comments.
+- Implements asynchronous requests and await to handle API calls efficiently, addressing the synchronous behavior of the previous version.
+- Visualizations and data processing are now performed asynchronously, reducing page load times and enhancing user experience.
+- Uses AJAX for real-time retrieval and rendering of results without requiring a full page refresh.
+- Provides visualizations for key metrics:
+  - Total views, likes, and comments.
+  - Engagement rate.
+  - Composite score.
+- Performs sentiment analysis on video comments and visualizes the results.
+- Suggests relevant videos based on data analysis and sentiment.
+`,
+    imageUrl: "https://i.ibb.co/jLjsC7q/youtube-data.png",
+    imageHint: "Youtube video recommender",
+    techStack: ["Quart", "asyncio", "pandas", "matplotlib", "shelve", "seaborn"],
+    category: "Artificial Intelligence",
+    liveUrl: "https://youtube-video-recommender.onrender.com",
+    githubUrl: "https://github.com/AmaanP314/youtube-video-recommender",
+  },
+  {
+    id: "ielts-evaluator",
+    title: "IELTS Essay Evaluator",
+    description:
+      "The IELTS Essay Evaluator is an AI-powered application designed to assess IELTS Writing Task 2 essays based on official IELTS scoring criteria",
+    detailedDescription: `The IELTS Essay Evaluator is an AI-powered application designed to assess IELTS Writing Task 2 essays based on official IELTS scoring criteria. It provides detailed evaluations for each criterion including Task Response, Coherence and Cohesion, Lexical Resource, and Grammatical Range and Accuracy. After submission, users receive an overall band score and a breakdown of their essay’s strengths and weaknesses, alongside visualizations and the ability to export the results.
+Key features:
+- **Essay Evaluation**: Automatically evaluates essays against the four IELTS Writing Task 2 criteria:
+  - **Task Response**: How well the essay addresses the prompt.
+  - **Coherence and Cohesion**: Structure, clarity, and logical flow.
+  - **Lexical Resource**: Vocabulary usage and range.
+  - **Grammatical Range and Accuracy**: Grammar usage and complexity.
+- **Band Score Calculation**: Each criterion is assigned a score between 1 and 9, and an overall band score is calculated based on the evaluations.
+- **Visualization**: Displays a bar chart showing the scores for each criterion, with a line for the overall band score.
+- **Results Export**: The evaluation results can be downloaded as a JSON file for future reference or analysis.
+- **Example Essay**: Load a pre-filled example essay to test the application’s functionality.
+- **Helpful Tips**: Provides tips on how to improve your IELTS Writing score.
+`,
+    imageUrl: "https://i.ibb.co/7xkTDMJr/IELTS.png",
+    imageHint: "IELTS Essay Evaluator",
+    techStack: [
+      "Python",
+      "LangChain",
+      "LLM",
+      "Streamlit",
+      "Pandas",
+      "Matplotlib",
+    ],
+    category: "Artificial Intelligence",
+    liveUrl: "https://huggingface.co/spaces/AmaanP314/IELTS-essay-evaluator",
+    githubUrl: "https://github.com/AmaanP314/ielts-essay-evaluator/",
+  },
+  {
+    id: "project-6", // Renamed from project-6 to project-7 to avoid ID conflict after inserting new projects
     title: "News Aggregator Scraper",
     description: "A web scraping tool that collects news articles from various sources and aggregates them into a single feed.",
     detailedDescription: `The News Aggregator Scraper is a Python-based tool designed to automate the collection of news articles.
@@ -160,7 +218,7 @@ Features:
 
 Built with Python, using libraries like BeautifulSoup for parsing HTML and Requests for HTTP requests. Potential use of Scrapy framework for more complex scraping tasks. Demonstrates ability to extract and process data from the web.
     `,
-    imageUrl: "https://picsum.photos/seed/project6/600/400",
+    imageUrl: "https://picsum.photos/seed/project6/600/400", // Kept seed project6 for original image
     imageHint: "data extraction code",
     techStack: ["Python", "BeautifulSoup", "Requests", "Web Scraping", "Data Extraction"],
     category: "Web Scraping",
