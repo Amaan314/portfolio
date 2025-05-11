@@ -6,7 +6,6 @@ import { SendHorizonal } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import type { ScrollAreaPrimitive } from '@radix-ui/react-scroll-area'; // Import type for ref
 import { ChatMessage } from './ChatMessage';
 import type { Message } from './Chatbot';
 import { cn } from '@/lib/utils';
@@ -20,29 +19,16 @@ interface ChatbotPanelProps {
 
 export function ChatbotPanel({ isOpen, messages, onSendMessage, isLoading }: ChatbotPanelProps) {
   const [inputValue, setInputValue] = useState('');
-  const scrollAreaRef = useRef<React.ElementRef<typeof ScrollArea>>(null); 
-  const scrollViewportRef = useRef<HTMLDivElement | null>(null); 
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (isOpen && scrollAreaRef.current) {
+    if (isOpen) {
+      // Scroll to the bottom when new messages are added, loading state changes, or panel opens.
+      // Using a timeout to defer the execution slightly, ensuring DOM updates are processed.
       const timer = setTimeout(() => {
-        if (scrollAreaRef.current) { 
-          const viewport = scrollAreaRef.current.querySelector<HTMLDivElement>('div[data-radix-scroll-area-viewport]');
-          if (viewport) {
-            scrollViewportRef.current = viewport;
-            viewport.scrollTop = viewport.scrollHeight;
-          }
-        }
-      }, 50); 
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      }, 50); // A small delay can be helpful
       return () => clearTimeout(timer);
-    } else if (!isOpen) {
-      scrollViewportRef.current = null;
-    }
-  }, [isOpen]);
-
-  useEffect(() => {
-    if (scrollViewportRef.current && isOpen) {
-      scrollViewportRef.current.scrollTop = scrollViewportRef.current.scrollHeight;
     }
   }, [messages, isLoading, isOpen]);
 
@@ -58,12 +44,12 @@ export function ChatbotPanel({ isOpen, messages, onSendMessage, isLoading }: Cha
   return (
     <div
       className={cn(
-        "fixed z-40 flex flex-col space-y-2 overflow-hidden", // Added overflow-hidden
+        "fixed z-40 flex flex-col space-y-2 overflow-hidden",
         "bottom-[calc(theme(spacing.6)_+_theme(spacing.14)_+_theme(spacing.2))] left-6", 
         "w-[calc(100%_-_theme(spacing.12))]", 
         "sm:bottom-6 sm:left-[calc(theme(spacing.6)_+_theme(spacing.14)_+_theme(spacing.2))]",
         "sm:w-auto sm:min-w-[320px] sm:max-w-sm md:min-w-[350px]", 
-        "max-h-[calc(100dvh-12rem)]", 
+        "max-h-[calc(100dvh-12rem)]", // This constrains the panel height
         "transition-all duration-300 ease-out",
         isOpen
           ? "opacity-100 translate-y-0 sm:translate-x-0 pointer-events-auto"
@@ -72,8 +58,7 @@ export function ChatbotPanel({ isOpen, messages, onSendMessage, isLoading }: Cha
       aria-hidden={!isOpen}
     >
       <ScrollArea
-        ref={scrollAreaRef}
-        className="h-full flex-grow min-h-0 chatbot-message-scroll-area" // Added h-full for explicitness
+        className="h-full flex-grow min-h-0 chatbot-message-scroll-area" // Takes available space and scrolls internally
       >
         <div className="p-4 flex flex-col space-y-4">
           {messages.map((msg) => (
@@ -86,6 +71,7 @@ export function ChatbotPanel({ isOpen, messages, onSendMessage, isLoading }: Cha
               </div>
             </div>
           )}
+          <div ref={messagesEndRef} /> {/* Anchor for scrolling to bottom */}
         </div>
       </ScrollArea>
 
