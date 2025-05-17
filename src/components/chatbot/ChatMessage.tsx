@@ -3,103 +3,70 @@
 
 import React from 'react';
 import { cn } from '@/lib/utils';
+import ReactMarkdown, { type Components } from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 interface ChatMessageProps {
   message: string;
   sender: 'user' | 'bot';
 }
 
-const parseMarkdown = (markdown: string): React.ReactNode[] => {
-  const elements: React.ReactNode[] = [];
-  let keyIndex = 0;
-
-  // Split by code blocks first
-  const parts = markdown.split(/(```[\s\S]*?```)/g);
-
-  parts.forEach((part, index) => {
-    if (part.startsWith('```') && part.endsWith('```')) {
-      const codeContent = part.substring(3, part.length - 3).trim();
-      // Attempt to detect language (simple check for a word before newline)
-      const langMatch = codeContent.match(/^(\w+)\n/);
-      const language = langMatch ? langMatch[1] : '';
-      const actualCode = langMatch ? codeContent.substring(langMatch[0].length) : codeContent;
-      
-      elements.push(
-        <pre key={`code-${keyIndex++}`} className="bg-muted p-2 rounded-md text-sm overflow-x-auto my-2">
-          {language && <div className="text-xs text-muted-foreground mb-1">{language}</div>}
-          <code>{actualCode}</code>
-        </pre>
-      );
-    } else {
-      // Process non-code parts
-      const lines = part.split('\n\n'); // Split by paragraphs
-      lines.forEach((line, lineIndex) => {
-        if (line.trim() === '') return;
-
-        const inlineElements: React.ReactNode[] = [];
-        // Regex for bold, italic, inline code
-        const inlineRegex = /(\*\*[\s\S]+?\*\*|\*[\s\S]+?\*|_[\s\S]+?_|`[\s\S]+?`)/g;
-        let lastIndex = 0;
-        let match;
-
-        while ((match = inlineRegex.exec(line)) !== null) {
-          // Add text before the match
-          if (match.index > lastIndex) {
-            inlineElements.push(line.substring(lastIndex, match.index));
-          }
-          // Add the formatted element
-          const matchedText = match[0];
-          if (matchedText.startsWith('**') && matchedText.endsWith('**')) {
-            inlineElements.push(<strong key={`strong-${keyIndex++}`}>{matchedText.substring(2, matchedText.length - 2)}</strong>);
-          } else if ((matchedText.startsWith('*') && matchedText.endsWith('*')) || (matchedText.startsWith('_') && matchedText.endsWith('_'))) {
-            inlineElements.push(<em key={`em-${keyIndex++}`}>{matchedText.substring(1, matchedText.length - 1)}</em>);
-          } else if (matchedText.startsWith('`') && matchedText.endsWith('`')) {
-            inlineElements.push(<code key={`code-inline-${keyIndex++}`} className="bg-muted px-1 py-0.5 rounded text-sm">{matchedText.substring(1, matchedText.length - 1)}</code>);
-          }
-          lastIndex = inlineRegex.lastIndex;
-        }
-        // Add any remaining text after the last match
-        if (lastIndex < line.length) {
-          inlineElements.push(line.substring(lastIndex));
-        }
-        
-        // Wrap lines (potentially multiple if separated by single \n) in a p, then join single newlines with <br />
-        const paragraphContent = inlineElements.reduce<React.ReactNode[]>((acc, el, i) => {
-          if (typeof el === 'string') {
-            const subLines = el.split('\n').map((subLine, subIdx) => (
-              <React.Fragment key={`subline-${keyIndex++}-${subIdx}`}>
-                {subLine}
-                {subIdx < el.split('\n').length - 1 && <br />}
-              </React.Fragment>
-            ));
-            return acc.concat(subLines);
-          }
-          return acc.concat(el);
-        }, []);
-
-
-        elements.push(<p key={`p-${keyIndex++}-${lineIndex}`} className="my-1">{paragraphContent}</p>);
-      });
-    }
-  });
-
-  return elements;
-};
-
-
 export function ChatMessage({ message, sender }: ChatMessageProps) {
   const isUser = sender === 'user';
-  const parsedContent = parseMarkdown(message);
+
+  // By removing the custom 'components' prop from ReactMarkdown,
+  // we allow Tailwind Prose (applied on the parent div for bot messages)
+  // to style the Markdown elements like code, links, lists, etc.
+  // This often leads to more consistent and correct rendering.
+  const markdownComponents: Components = {
+    // Example: Customize link styling if needed, otherwise Prose handles it.
+    // a: ({node, ...props}) => <a className="text-primary hover:underline" {...props} />,
+
+    // Prose will handle p, ul, ol, li, blockquote, table, th, td, pre, code
+    // If specific overrides are still needed, they can be added here.
+    // For instance, if code blocks need very specific styling not covered by Prose:
+    code({ node, inline, className, children, ...props }) {
+      const match = /language-(\w+)/.exec(className || '');
+      if (!inline && match) {
+        return (
+          <div className="my-2 overflow-hidden rounded-md border bg-muted">
+            <div className="bg-slate-700 px-3 py-1 text-xs text-slate-100">
+              {match[1]}
+            </div>
+            <pre className="overflow-x-auto p-3 text-sm">
+              <code {...props} className={className}>
+                {children}
+              </code>
+            </pre>
+          </div>
+        );
+      }
+      return (
+        <code {...props} className={cn("px-1 py-0.5 bg-muted rounded-sm text-sm", className)}>
+          {children}
+        </code>
+      );
+    },
+  };
+
 
   return (
     <div className={cn("flex w-full", isUser ? "justify-end" : "justify-start")}>
       <div
         className={cn(
-          "max-w-[80%] p-3 rounded-lg shadow",
-          isUser ? "bg-primary text-primary-foreground" : "bg-card text-card-foreground border border-border"
+          "max-w-[80%] p-3 rounded-lg shadow-md overflow-hidden break-words", // Added shadow-md and break-words
+          isUser
+            ? "bg-primary text-primary-foreground"
+            : "bg-card text-card-foreground border border-border prose dark:prose-invert prose-sm sm:prose-base max-w-none" // Added max-w-none for prose to take full available width
+                                                                                                                        // and prose-sm sm:prose-base for responsive typography
         )}
       >
-        {parsedContent}
+        <ReactMarkdown
+          remarkPlugins={[remarkGfm]}
+          components={markdownComponents} // Using refined components, mainly for code blocks
+        >
+          {message}
+        </ReactMarkdown>
       </div>
     </div>
   );
