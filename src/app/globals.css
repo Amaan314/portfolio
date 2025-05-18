@@ -232,7 +232,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
+  width: 100%; /* Changed from 100vw to 100% */
   height: 100vh;
   z-index: -10; /* Ensure it's behind everything */
   opacity: 0.7; /* Slightly more visible */
@@ -248,4 +248,3 @@
   animation: subtle-plasma 45s ease infinite;
   opacity: 0.6; /* Slightly less visible in dark mode for subtlety */
 }
-
