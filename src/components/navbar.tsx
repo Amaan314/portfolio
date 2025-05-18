@@ -2,10 +2,10 @@
 
 import Link from "next/link"
 import * as React from "react"
-import { Menu, X } from "lucide-react"
+import { Menu } from "lucide-react" // Removed X as SheetContent provides its own close
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetTrigger, SheetClose, SheetTitle } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet" // Removed SheetClose
 
 const navLinks = [
   { href: "#hero", label: "Home" },
@@ -49,26 +49,24 @@ export function Navbar() {
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-[280px] p-6">
-              {/* Added accessible title for the sheet */}
               <SheetTitle className="sr-only">Mobile Navigation Menu</SheetTitle>
               <div className="flex flex-col space-y-6">
                 <div className="flex justify-between items-center">
                  <Link href="#hero" className="text-lg font-bold text-primary" onClick={() => setIsSheetOpen(false)}>
                     Portfolio Pro
                   </Link>
-                  {/* The SheetContent component provides its own close button, so we remove the explicit one here */}
                 </div>
                 <nav className="flex flex-col space-y-4">
                   {navLinks.map((link) => (
-                    <SheetClose asChild key={link.href}>
-                      <Link
-                        href={link.href}
-                        className="text-lg transition-colors hover:text-primary"
-                        onClick={() => setIsSheetOpen(false)}
-                      >
-                        {link.label}
-                      </Link>
-                    </SheetClose>
+                    // Removed SheetClose wrapper
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      className="text-lg transition-colors hover:text-primary"
+                      onClick={() => setIsSheetOpen(false)} // This will close the sheet
+                    >
+                      {link.label}
+                    </Link>
                   ))}
                 </nav>
                 <div className="pt-4 border-t border-border">
