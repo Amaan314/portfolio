@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useRef, useEffect } from 'react';
@@ -24,10 +25,10 @@ export function ChatbotPanel({ isOpen, messages, onSendMessage, isLoading }: Cha
     if (isOpen) {
       const timer = setTimeout(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-      }, 50);
+      }, 50); // Small delay to ensure DOM updates are complete
       return () => clearTimeout(timer);
     }
-  }, [messages, isLoading, isOpen]);
+  }, [messages, isLoading, isOpen]); // Rerun when messages, isLoading or isOpen changes
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,23 +42,24 @@ export function ChatbotPanel({ isOpen, messages, onSendMessage, isLoading }: Cha
     <div
       className={cn(
         "fixed z-40 flex flex-col space-y-2 overflow-hidden",
-        "bottom-[calc(theme(spacing.6)_+_theme(spacing.14)_+_theme(spacing.2))] left-6",
-        "w-[calc(100%_-_theme(spacing.12))]",
-        "sm:bottom-6 sm:left-[calc(theme(spacing.6)_+_theme(spacing.14)_+_theme(spacing.2))]",
-        "sm:w-auto sm:min-w-[320px] sm:max-w-sm md:min-w-[350px]",
-        "h-[calc(100dvh-5rem)]", // MODIFIED: Changed max-h to h
+        // Mobile positioning: bottom-6 (1.5rem), left-6 (1.5rem)
+        "bottom-6 left-6", 
+        "w-[calc(100%_-_theme(spacing.12))]", // Mobile width: 100% - 3rem (1.5rem padding on each side)
+        // Desktop/sm+ positioning:
+        "sm:bottom-6 sm:left-[calc(theme(spacing.6)_+_theme(spacing.14)_+_theme(spacing.2))]", // sm:bottom-6 (1.5rem), sm:left-[5.5rem]
+        "sm:w-auto sm:min-w-[320px] sm:max-w-sm md:min-w-[350px]", // Desktop width
+        "h-[calc(100dvh-5rem)]", // Consistent height
         "transition-all duration-300 ease-out",
         isOpen
-          ? "opacity-100 translate-y-0 sm:translate-x-0 pointer-events-auto"
-          : "opacity-0 translate-y-4 sm:translate-y-0 sm:-translate-x-4 pointer-events-none"
+          ? "opacity-100 translate-y-0 sm:translate-x-0 pointer-events-auto" // Open state: fully visible, at final position
+          : "opacity-0 translate-y-4 sm:translate-y-0 sm:-translate-x-4 pointer-events-none" // Closed state: invisible, slightly translated
       )}
       aria-hidden={!isOpen}
     >
       <ScrollArea
-        className="h-full flex-grow min-h-0 chatbot-message-scroll-area"
+        className="h-full flex-grow min-h-0 chatbot-message-scroll-area" 
       >
-        {/* MODIFIED: Added h-full and justify-end to this div */}
-        <div className="p-4 flex flex-col space-y-4 h-full justify-end">
+        <div className="p-4 flex flex-col space-y-4 h-full justify-end"> {/* Ensures messages stack from bottom */}
           {messages.map((msg) => (
             <ChatMessage key={msg.id} message={msg.text} sender={msg.sender} />
           ))}
@@ -74,7 +76,7 @@ export function ChatbotPanel({ isOpen, messages, onSendMessage, isLoading }: Cha
 
       <form
         onSubmit={handleSubmit}
-        className="p-3 bg-card/80 backdrop-blur-md shadow-xl rounded-lg border border-border"
+        className="p-3 bg-card/80 backdrop-blur-md shadow-xl rounded-lg border border-border" 
         aria-label="Chat input form"
       >
         <div className="flex items-center space-x-2">
