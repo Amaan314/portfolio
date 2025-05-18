@@ -5,7 +5,7 @@ import * as React from "react"
 import { Menu, X } from "lucide-react"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetTrigger, SheetClose, SheetTitle } from "@/components/ui/sheet"
 
 const navLinks = [
   { href: "#hero", label: "Home" },
@@ -49,17 +49,14 @@ export function Navbar() {
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-[280px] p-6">
+              {/* Added accessible title for the sheet */}
+              <SheetTitle className="sr-only">Mobile Navigation Menu</SheetTitle>
               <div className="flex flex-col space-y-6">
                 <div className="flex justify-between items-center">
                  <Link href="#hero" className="text-lg font-bold text-primary" onClick={() => setIsSheetOpen(false)}>
                     Portfolio Pro
                   </Link>
-                  <SheetClose asChild>
-                     <Button variant="ghost" size="icon">
-                        <X className="h-6 w-6" />
-                        <span className="sr-only">Close menu</span>
-                      </Button>
-                  </SheetClose>
+                  {/* The SheetContent component provides its own close button, so we remove the explicit one here */}
                 </div>
                 <nav className="flex flex-col space-y-4">
                   {navLinks.map((link) => (
