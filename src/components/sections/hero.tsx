@@ -28,13 +28,13 @@ export function HeroSection() {
       <div className={cn("container relative z-10 mx-auto flex max-w-4xl flex-col items-center px-4 py-16 md:py-24 scroll-animate", isVisible ? "scroll-animate-active" : "")}>
         <div className={cn("mb-4 flex items-center justify-center rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary scroll-animate scroll-animate-fade-in", isVisible ? "scroll-animate-active" : "")} style={{ transitionDelay: '0.2s' }}>
           <Sparkles className="mr-2 h-4 w-4" />
-          Welcome to My Digital Space
+          Welcome to My Portfolio
         </div>
         <h1 className={cn("text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl scroll-animate scroll-animate-slide-up", isVisible ? "scroll-animate-active" : "")} style={{ transitionDelay: '0.4s' }}>
-          Hi, I&apos;m <span className="text-primary">Your Name</span>
+          Hi, I&apos;m <span className="text-primary">Amaan Poonawala</span>
         </h1>
         <p className={cn("mt-6 max-w-2xl text-lg text-muted-foreground sm:text-xl md:text-2xl scroll-animate scroll-animate-slide-up", isVisible ? "scroll-animate-active" : "")} style={{ transitionDelay: '0.6s' }}>
-          A passionate developer creating intuitive and dynamic web experiences. Explore my work and let&apos;s build something amazing together.
+          AI Developer | Data Science
         </p>
         <div className={cn("mt-10 flex flex-col gap-4 sm:flex-row sm:gap-6 scroll-animate scroll-animate-fade-in", isVisible ? "scroll-animate-active" : "")} style={{ transitionDelay: '0.8s' }}>
           <Button size="lg" asChild className="shadow-lg transition-transform hover:scale-105">
