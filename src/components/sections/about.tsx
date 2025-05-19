@@ -53,13 +53,25 @@ export function AboutSection() {
                   A Bit About My Journey
                 </h3>
                 <p className="mb-4 text-muted-foreground">
-                  Hello! I&apos;m [Your Name], a dedicated and results-oriented software developer with a passion for crafting elegant and efficient solutions. My journey into the world of technology began with a fascination for how software can transform ideas into reality.
+                  I&apos;m Amaan Poonawala, and over the past two years, I’ve built a solid foundation in software development, data science, and AI through a hands-on, structured, and project-driven approach.
                 </p>
                 <p className="mb-4 text-muted-foreground">
-                  Over the years, I&apos;ve honed my skills in full-stack development, with a particular focus on modern JavaScript frameworks like React and Next.js. I enjoy tackling complex problems and continuously learning new technologies to stay at the forefront of innovation.
+                  <strong>Full-Stack Foundations:</strong> I began with full-stack web development (HTML, CSS, JavaScript, React, Node.js, MongoDB) to understand how real-world systems are built and deployed.
+                </p>
+                <p className="mb-4 text-muted-foreground">
+                  <strong>Deep Dive into JavaScript & Python:</strong> I strengthened my JavaScript skills (closures, async programming, OOP) and then transitioned to Python, focusing on core programming concepts and data structures.
+                </p>
+                <p className="mb-4 text-muted-foreground">
+                  <strong>Data Science Specialization:</strong> I explored web scraping (Selenium, Scrapy), data analysis (Pandas, NumPy, Seaborn), and SQL (MySQL, joins, subqueries) while building tools like a YouTube analytics app and IMDb data explorer.
+                </p>
+                <p className="mb-4 text-muted-foreground">
+                  <strong>Machine & Deep Learning:</strong> I studied ML algorithms (regression, clustering, decision trees), built models for fraud detection and audiobook prediction, and gained hands-on experience with neural networks using TensorFlow and PyTorch.
+                </p>
+                <p className="mb-4 text-muted-foreground">
+                  <strong>Advanced AI & NLP:</strong> I delved into Transformers and LLMs through research and experimentation. I built a sentiment analysis model fine-tuned on 1M+ YouTube comments and integrated it into a recommendation system.
                 </p>
                 <p className="text-muted-foreground">
-                  My goal is to contribute to meaningful projects that make a positive impact. I&apos;m always open to new challenges and collaborations. When I&apos;m not coding, I enjoy [Your Hobby 1], [Your Hobby 2], and exploring new [Your Interest].
+                  <strong>AI Application Development:</strong> Most recently, I’ve worked with LangChain and LlamaIndex to develop full-stack AI products like an IELTS essay evaluator, leveraging advanced RAG pipelines and prompt engineering. This journey has helped me combine system-level thinking with deep learning and NLP expertise — enabling me to build impactful AI-powered applications from scratch.
                 </p>
               </div>
             </div>
